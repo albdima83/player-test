@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width"
+		/>
+
+		<% (meta??[]).forEach(function(mt) { %>
+		<meta name="<%= mt.name %>" content="<%= mt.value %>" />
+		<% }); %>
+
+		<title>Player Test</title>
+		<style>
+			body {
+				width: "100%";
+				height: "100%";
+				background: "white";
+				margin: 0;
+				padding: 0;
+			}
+			#appContainer {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script
+			data-consolejs-channel="d94aa8f0-982f-4736-31d7-8cfb50366950"
+			src="https://remotejs.com/agent/agent.js"
+		></script>
+
+		<div id="root"></div>
+		<script type="module" src="./src/index.tsx"></script>
+	</body>
+</html>

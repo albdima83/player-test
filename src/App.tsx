@@ -1,0 +1,73 @@
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
+import { Stream } from "./types";
+import { StreamSelector } from "./views/StreamSelector";
+import { RendererSelector } from "./views/RendererSelector";
+import { PlayerRendererSelectorComponents } from "./config";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import { ConsoleLogMessage } from "./views/ConsoleLogMessage";
+
+function App() {
+	const [stream, setStream] = useState<Stream | undefined>(undefined);
+	const [renderer, setRenderer] = useState<keyof typeof PlayerRendererSelectorComponents>("oipf");
+
+	useEffect(() => {
+		//NO DRM (https://vbd.mediasetinfinity.es/orivod/vod/bitmovin/59/94/5994f39c-a508-4580-8229-49796d36a4c1/main.ism/ctv.mpd)
+		//DRM PLAYREADY (https://vbd.mediasetinfinity.es/orivod/vod/bitmovin/cc/a5/cca57aa3-1108-496b-b307-9d9532bc4657/mpd-cenc.ism/ctv.mpd)
+		//LICENSE URL WIDEVINE (https://widevine.entitlement.theplatform.eu/wv/web/ModularDrm/getRawWidevineLicense?token=eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJtcy1lcy1wcm9kLXBsYS9iOGE3ZjM4MTE4ZTc0ZTRkOTJmNGYwYjk1NmYyMDgxOCIsImlzcyI6IjEiLCJleHAiOjE3NDg2ODY2OTgsImlhdCI6MTc0ODU5NjY5ODMxNSwianRpIjoiMDNhNDk1YTktM2I4NS00OWE3LTgzMjUtYjNjN2VlNzViNGRmIiwiZGlkIjoibXMtZXMtcHJvZC1wbGEiLCJ1bm0iOiJiOGE3ZjM4MTE4ZTc0ZTRkOTJmNGYwYjk1NmYyMDgxOCIsImN0eCI6IntcImlkXCI6XCJiOGE3ZjM4MTE4ZTc0ZTRkOTJmNGYwYjk1NmYyMDgxOFwiLFwidXNlck5hbWVcIjpcImI4YTdmMzgxMThlNzRlNGQ5MmY0ZjBiOTU2ZjIwODE4XCIsXCJlbWFpbFwiOlwiXCIsXCJmdWxsTmFtZVwiOlwiXCIsXCJhdHRyaWJ1dGVzXCI6e1wiYWR1bHRcIjpcInRydWVcIixcImFwcE5hbWVcIjpcImdlbmVyaWMtdHZzaW11bGF0b3IvL21lZGlhc2V0cGxheS1jdHYvMS4xNC4yNlwiLFwiY2xpZW50X2lkXCI6XCJlMGQ5MWQyZi04YmJjLTRmZDgtYTQ1Ni0xMjViMzNkODY0NGZcIixcImRldmljZU5hbWVcIjpcIlwiLFwiZW1haWxcIjpcInJiLWVzcC1wcmVwcm9kLTAwMkBtcGxheS5pdFwiLFwiZ2lneWFTaXRlXCI6XCJkZWZhdWx0XCIsXCJoYXNoXCI6XCJNdVRWK0UvdXBiRVpOWExFWXF3dWdrRnlaMVBwWlJNUnhSQkVTMEdmWVNnPVwiLFwiaW50ZXJuYWxfaWRcIjpcIjI5YTkyMTFjLWNiZTMtNDFkNS05YzdjLTQ3MmE4ZDY5MDc3OVwiLFwicmVnaXN0cmF0aW9uU291cmNlXCI6XCJcIixcInRlbmFudFwiOlwiRVNQXCIsXCJ0b3NcIjpcImZhbHNlXCIsXCJ1cm46dGhlcGxhdGZvcm06Y29uc3VtZXI6YWNjb3VudFwiOlwiaHR0cHM6Ly9hY2NvdW50cy5hdWRpZW5jZS50aGVwbGF0Zm9ybS5ldS9hY2NvdW50cy8yNzA5OTM4OTEwL2ZkNzk0NDIyLTk1ZmYtNDFhZC1hODc4LTliNjRjMzFiNjQ1ZlwiLFwidXJuOnRoZXBsYXRmb3JtOmNvbnN1bWVyOmFjY291bnQ6cGVyc29uYVwiOlwiaHR0cHM6Ly9hY2NvdW50cy5hdWRpZW5jZS50aGVwbGF0Zm9ybS5ldS9hY2NvdW50cy8yNzA5OTM4OTEwL2ZkNzk0NDIyLTk1ZmYtNDFhZC1hODc4LTliNjRjMzFiNjQ1Zi9wZXJzb25hcy8xM2RiNzY1Yi1kMjEzLTRhNmQtOWYxMC1iNDI5Y2RmYzlmNGFcIn0sXCJvd25lcklkXCI6XCJcIn1cbiIsIm9pZCI6IjI3MDk5Mzg5MTAifQ.H_rfVJkYbmhL0c9QPzAiDVBl00DvuhmVYWqGcqGfUGH1E4W8M3CVkZD895pnodceNys47U--kVjv259Qxna_AhJJDGPGlxVDftwuDyKGxJeilcLpIJXKG0-nXRn_n9NO674ONLVGyvdYFCdobWgqFDfgtHPpr6T725tin0a3TiRZKloH6Lx2wD0je8mSg_cY6pEVeL9uQ0V133q0TBxv8HGGHZqNd2YOiD4jAMSDV5mTuWMc4zChJxLb-_bRRhJayJYFQ-QxuX5N2A7rC4NqqCVfC82jSpIq3OguEVtab8pa7pMNZYrN8CkZ9-EtwZpT0W_icNPda-bBCa9tGwclzQ&releasePid=FGePXeK5ycsv&account=http%3A%2F%2Faccess.auth.theplatform.com%2Fdata%2FAccount%2F2709938910&schema=1.0)
+		//LICENSE URL PLAYREADY (https://playready3.entitlement.eu.theplatform.com/playready/rightsmanager.asmx?auth=eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJtcy1lcy1wcm9kLXBsYS8zNjYyZTU1NDBjNGY0OWNiYWU1MjMxMjYyOGZjN2I3MiIsImlzcyI6IjEiLCJleHAiOjE3NDg2ODg2NDIsImlhdCI6MTc0ODU5ODY0MjA1MywianRpIjoiNjMyOTc0ZmEtOWJmYy00NjhlLWFlMGMtNjYyZTE2MGQyN2ViIiwiZGlkIjoibXMtZXMtcHJvZC1wbGEiLCJ1bm0iOiIzNjYyZTU1NDBjNGY0OWNiYWU1MjMxMjYyOGZjN2I3MiIsImN0eCI6IntcImlkXCI6XCIzNjYyZTU1NDBjNGY0OWNiYWU1MjMxMjYyOGZjN2I3MlwiLFwidXNlck5hbWVcIjpcIjM2NjJlNTU0MGM0ZjQ5Y2JhZTUyMzEyNjI4ZmM3YjcyXCIsXCJlbWFpbFwiOlwiXCIsXCJmdWxsTmFtZVwiOlwiXCIsXCJhdHRyaWJ1dGVzXCI6e1wiYWR1bHRcIjpcInRydWVcIixcImFwcE5hbWVcIjpcImdlbmVyaWMtdHZzaW11bGF0b3IvL21lZGlhc2V0cGxheS1jdHYvMS4xNC4yNlwiLFwiY2xpZW50X2lkXCI6XCIxMjlmOTQwNC0wMmJkLTQ5NmQtYTdkYy03YTQ2NjY0YjIyZjJcIixcImRldmljZU5hbWVcIjpcIlwiLFwiZW1haWxcIjpcIjFvdHQuaW5maW5pdHkubGFiKzEyQGdtYWlsLmNvbVwiLFwiZ2lneWFTaXRlXCI6XCJkZWZhdWx0XCIsXCJoYXNoXCI6XCJJdTM4Q29id3dKT2dqWEYraG5Ld0VnWUdMYk1UUFNvNnhuQU9uUnZFdnpjPVwiLFwiaW50ZXJuYWxfaWRcIjpcImY1ZWRjNjIzLTU2OGQtNGIwYi1hZmFhLTYwODE1ODhjNWM0NlwiLFwicmVnaXN0cmF0aW9uU291cmNlXCI6XCJcIixcInRlbmFudFwiOlwiRVNQXCIsXCJ0b3NcIjpcInRydWVcIixcInVybjp0aGVwbGF0Zm9ybTpjb25zdW1lcjphY2NvdW50XCI6XCJodHRwczovL2FjY291bnRzLmF1ZGllbmNlLnRoZXBsYXRmb3JtLmV1L2FjY291bnRzLzI3MDk5Mzg5MTAvMDQzOWZhYzktMzYzOS00ZTZhLWFlNTEtZmE2ZWE3YzllODYxXCIsXCJ1cm46dGhlcGxhdGZvcm06Y29uc3VtZXI6YWNjb3VudDpwZXJzb25hXCI6XCJodHRwczovL2FjY291bnRzLmF1ZGllbmNlLnRoZXBsYXRmb3JtLmV1L2FjY291bnRzLzI3MDk5Mzg5MTAvMDQzOWZhYzktMzYzOS00ZTZhLWFlNTEtZmE2ZWE3YzllODYxL3BlcnNvbmFzL2FlZGEyZjc3LWRiNzAtNDJmZC1iNTU0LTk1ZjFiZGQ5OTg3ZFwifSxcIm93bmVySWRcIjpcIlwifVxuIiwib2lkIjoiMjcwOTkzODkxMCJ9.iWAsl5cvo_bpfbpmlbvQzar0_2tsjh50caH-FLM_pHWNxhwI5M3Od8l8RzF4nbmDcpCyIQHiJQPLw6cHVup9hA9iFgcM61_EoDIUJ5uiXuXuumcOnDrC-LOfu4S8o88IM9b0LDgEh3-qEb_zuBAId5QR8Ai9Aek9KiYfEjJvJikNFfQOmaHAptuCYFBU9wjk5tx_mpewyF7sFeJPR2dT9wYuaR7oAF6XudB_6gycYvYdTOAERaexdcCNeeemdzDcyr_4tFwfyKOWphgQwZfOzrbewZO5viu1mjIVNpBS3IHKPEJiw7d-70V9SleY1Uu57dNl_5DwY4frBIFfVPEFtw&releasePid=FGePXeK5ycsv&account=http%3A%2F%2Faccess.auth.theplatform.com%2Fdata%2FAccount%2F2709938910&schema=1.0)
+		const url =
+			"https://vbd.mediasetinfinity.es/orivod/vod/bitmovin/cc/a5/cca57aa3-1108-496b-b307-9d9532bc4657/mpd-cenc.ism/ctv.mpd";
+		const licenseUrl =
+			"https://playready3.entitlement.eu.theplatform.com/playready/rightsmanager.asmx?auth=eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJtcy1lcy1wcm9kLXBsYS8zNjYyZTU1NDBjNGY0OWNiYWU1MjMxMjYyOGZjN2I3MiIsImlzcyI6IjEiLCJleHAiOjE3NDg2ODg2NDIsImlhdCI6MTc0ODU5ODY0MjA1MywianRpIjoiNjMyOTc0ZmEtOWJmYy00NjhlLWFlMGMtNjYyZTE2MGQyN2ViIiwiZGlkIjoibXMtZXMtcHJvZC1wbGEiLCJ1bm0iOiIzNjYyZTU1NDBjNGY0OWNiYWU1MjMxMjYyOGZjN2I3MiIsImN0eCI6IntcImlkXCI6XCIzNjYyZTU1NDBjNGY0OWNiYWU1MjMxMjYyOGZjN2I3MlwiLFwidXNlck5hbWVcIjpcIjM2NjJlNTU0MGM0ZjQ5Y2JhZTUyMzEyNjI4ZmM3YjcyXCIsXCJlbWFpbFwiOlwiXCIsXCJmdWxsTmFtZVwiOlwiXCIsXCJhdHRyaWJ1dGVzXCI6e1wiYWR1bHRcIjpcInRydWVcIixcImFwcE5hbWVcIjpcImdlbmVyaWMtdHZzaW11bGF0b3IvL21lZGlhc2V0cGxheS1jdHYvMS4xNC4yNlwiLFwiY2xpZW50X2lkXCI6XCIxMjlmOTQwNC0wMmJkLTQ5NmQtYTdkYy03YTQ2NjY0YjIyZjJcIixcImRldmljZU5hbWVcIjpcIlwiLFwiZW1haWxcIjpcIjFvdHQuaW5maW5pdHkubGFiKzEyQGdtYWlsLmNvbVwiLFwiZ2lneWFTaXRlXCI6XCJkZWZhdWx0XCIsXCJoYXNoXCI6XCJJdTM4Q29id3dKT2dqWEYraG5Ld0VnWUdMYk1UUFNvNnhuQU9uUnZFdnpjPVwiLFwiaW50ZXJuYWxfaWRcIjpcImY1ZWRjNjIzLTU2OGQtNGIwYi1hZmFhLTYwODE1ODhjNWM0NlwiLFwicmVnaXN0cmF0aW9uU291cmNlXCI6XCJcIixcInRlbmFudFwiOlwiRVNQXCIsXCJ0b3NcIjpcInRydWVcIixcInVybjp0aGVwbGF0Zm9ybTpjb25zdW1lcjphY2NvdW50XCI6XCJodHRwczovL2FjY291bnRzLmF1ZGllbmNlLnRoZXBsYXRmb3JtLmV1L2FjY291bnRzLzI3MDk5Mzg5MTAvMDQzOWZhYzktMzYzOS00ZTZhLWFlNTEtZmE2ZWE3YzllODYxXCIsXCJ1cm46dGhlcGxhdGZvcm06Y29uc3VtZXI6YWNjb3VudDpwZXJzb25hXCI6XCJodHRwczovL2FjY291bnRzLmF1ZGllbmNlLnRoZXBsYXRmb3JtLmV1L2FjY291bnRzLzI3MDk5Mzg5MTAvMDQzOWZhYzktMzYzOS00ZTZhLWFlNTEtZmE2ZWE3YzllODYxL3BlcnNvbmFzL2FlZGEyZjc3LWRiNzAtNDJmZC1iNTU0LTk1ZjFiZGQ5OTg3ZFwifSxcIm93bmVySWRcIjpcIlwifVxuIiwib2lkIjoiMjcwOTkzODkxMCJ9.iWAsl5cvo_bpfbpmlbvQzar0_2tsjh50caH-FLM_pHWNxhwI5M3Od8l8RzF4nbmDcpCyIQHiJQPLw6cHVup9hA9iFgcM61_EoDIUJ5uiXuXuumcOnDrC-LOfu4S8o88IM9b0LDgEh3-qEb_zuBAId5QR8Ai9Aek9KiYfEjJvJikNFfQOmaHAptuCYFBU9wjk5tx_mpewyF7sFeJPR2dT9wYuaR7oAF6XudB_6gycYvYdTOAERaexdcCNeeemdzDcyr_4tFwfyKOWphgQwZfOzrbewZO5viu1mjIVNpBS3IHKPEJiw7d-70V9SleY1Uu57dNl_5DwY4frBIFfVPEFtw&releasePid=FGePXeK5ycsv&account=http%3A%2F%2Faccess.auth.theplatform.com%2Fdata%2FAccount%2F2709938910&schema=1.0";
+
+		const s: Stream = {
+			url,
+			licenseUrl,
+			drmType: "playready",
+		};
+
+		setStream(s);
+	}, []);
+
+	return (
+		<>
+			<AppBar position="static" color="primary">
+				<Toolbar>
+					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+						Test Player App
+					</Typography>
+				</Toolbar>
+			</AppBar>
+			<Box display="flex" gap={2} mt={2}>
+				<Container>
+					<Box display="flex" flexDirection="column" gap={2} mb={4}>
+						<RendererSelector onRendererSelected={(renderer) => setRenderer(renderer)} renderer={renderer} />
+						<StreamSelector onStreamSelected={(stream) => setStream(stream)} />
+					</Box>
+					<Box
+						sx={{
+							width: "100%",
+							aspectRatio: "16 / 9",
+							backgroundColor: "black",
+						}}
+					>
+						{renderer &&
+							(() => {
+								const Player = PlayerRendererSelectorComponents[renderer];
+								return <Player stream={stream} />;
+							})()}
+					</Box>
+				</Container>
+				<Box flex={2}>
+					<ConsoleLogMessage />
+				</Box>
+			</Box>
+		</>
+	);
+}
+
+export default App;

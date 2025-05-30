@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/config.ts","./src/global.d.ts","./src/index.tsx","./src/types.ts","./src/renderes/oipf.tsx","./src/renderes/shaka.tsx","./src/renderes/types.ts","./src/renderes/hooks/useshakaeventlogger.ts","./src/utils/logger.ts","./src/views/consolelogmessage.tsx","./src/views/rendererselector.tsx","./src/views/streamselector.tsx"],"version":"5.8.3"}
